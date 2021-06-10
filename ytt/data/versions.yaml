@@ -1,0 +1,11 @@
+#@data/values
+---
+github_actions:
+  actions:
+    checkout: 'actions/checkout@v2'
+    labeler: 'actions/labeler@v3'
+    setup_node: 'actions/setup-node@v1'
+  avakar:
+    create_deployment: 'avakar/create-deployment@v1'
+  ffittschen:
+    pr_branch_labeler: 'ffittschen/pr-branch-labeler@v1'

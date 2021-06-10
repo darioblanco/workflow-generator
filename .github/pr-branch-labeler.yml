@@ -1,0 +1,11 @@
+chore:
+  head: 'chore/*'
+
+feat:
+  head: ['feat/*', 'feature/*']
+
+fix:
+  head: ['fix/*', 'bug/*']
+
+test:
+  head: 'test/*'

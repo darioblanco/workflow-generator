@@ -1,0 +1,66 @@
+#@ load("@ytt:data", "data")
+#@ load("lib/steps.lib.yml", "create_deployment")
+
+---
+name: #@ "Deployment Trigger {}".format(data.values.package)
+'on':
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: The environment where to deploy
+        required: true
+        default: stage
+      description:
+        description: The information about the deployment change
+        required: false
+        default: Manual deployment in github actions
+      owner:
+        description: The owner of the deployment change
+        required: false
+        default: kirinusbot
+      ref:
+        description: The github ref to deploy
+        required: true
+        default: main
+env:
+  PACKAGE: #@ data.values.package
+  PROD_URL: #@ data.values.prod_url
+  QA_URL: #@ data.values.qa_url
+  STAGE_URL: #@ data.values.stage_url
+jobs:
+  trigger-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Load deployment trigger variables
+        id: vars
+        run: |
+          if [ "$GITHUB_EVENT_NAME" == 'push' ]
+          then
+            DESCRIPTION=${{ github.event.head_commit.message }}
+            OWNER=${{ github.event.pusher.name }}
+            REF=${{ github.ref }}
+            if [[ ${REF#/refs/tags} == *"-rc."* ]];
+            then
+              ENVIRONMENT="qa"
+              URL=${{ env.QA_URL }}
+            else
+              ENVIRONMENT="prod"
+              URL=${{ env.PROD_URL }}
+            fi
+          else
+            DESCRIPTION=${{ github.event.inputs.description }}
+            ENVIRONMENT=${{ github.event.inputs.environment }}
+            if [ "$ENVIRONMENT" == 'prod' ]
+            then
+              URL=${{ env.PROD_URL }}
+            else if [ "$ENVIRONMENT" == 'qa' ]
+              URL=${{ env.QA_URL }}
+            else
+              URL=${{ env.STAGE_URL }}
+            fi
+            OWNER=${{ github.event.inputs.owner }}
+          fi
+          echo "::set-output name=description::$DESCRIPTION"
+          echo "::set-output name=environment::$ENVIRONMENT"
+          echo "::set-output name=owner::$OWNER"
+      -  #@ create_deployment(environment="${{ steps.vars.outputs.environment }}", package=data.values.package, url="${{ steps.vars.outputs.url }}", description="${{ steps.vars.outputs.description }}", ref="${{ github.event.inputs.ref }}")

@@ -1,0 +1,46 @@
+#@ load("@ytt:template", "template")
+#@ load("@ytt:data", "data")
+
+#@ def checkout(**kwargs):
+name: #@ "Checkout {} git repository".format(kwargs["repository"] if (kwargs and "repository" in kwargs) else "current")
+uses: #@ data.values.github_actions.actions.checkout
+#@ if kwargs:
+with:
+  _: #@ template.replace(kwargs)
+#@ end
+#@ end
+
+#@ def create_deployment(**kwargs):
+name: #@ "Create Github {} deployment".format(kwargs["environment"])
+uses: #@ data.values.github_actions.avakar.create_deployment
+with:
+  auto_merge: false
+  environment: #@ "{0}-{1}".format(kwargs["environment"], kwargs["package"])
+  ref: #@ kwargs.get("ref", "${{ github.ref }}")
+  required_contexts: ''
+  #@yaml/text-templated-strings
+  payload: |
+    {
+      "package": "(@= kwargs["package"] @)",
+      "environment": "(@= kwargs["environment"] @)",
+      "description": "(@= kwargs.get("description", "${{ github.event.head_commit.message }}") @)",
+      "owner": "(@= kwargs.get("owner", "${{ github.event.pusher.name }}") @)",
+      "url": "(@= kwargs["url"] @)"
+    }
+  production_environment: #@ kwargs["environment"] == "prod"
+  transient_environment: #@ kwargs["environment"] == "test"
+env:
+  GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+#@ end
+
+#@ def setup_node(version="14.x"):
+name: Use Node.js
+uses: #@ data.values.github_actions.actions.setup_node
+with:
+  node-version: #@ version
+#@ end
+
+#@ def yarn_install():
+name: Install yarn dependencies
+run: yarn install
+#@ end

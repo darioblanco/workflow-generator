@@ -1,0 +1,27 @@
+#@ load("@ytt:data", "data")
+#@ load("lib/steps.lib.yml", "checkout", "setup_node", "yarn_install")
+
+---
+name: PR
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label PR based on branch name
+        if: github.event.action == 'opened'
+        uses: #@ data.values.github_actions.ffittschen.pr_branch_labeler
+        with:
+          repo-token: "${{ github.token }}"
+      - name: Label PR based on pushed file paths
+        uses: #@ data.values.github_actions.actions.labeler
+        with:
+          repo-token: "${{ github.token }}"
+          configuration-path: ".github/pr-path-labeler.yml"
+          sync-labels: false
