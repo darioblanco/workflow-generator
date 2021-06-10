@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "paths": {
+      "@darioblanco/workflow-generator/*": ["./src/*"],
+      "@darioblanco/workflow-generator/test/*": ["./test/*"]
+    },
+    "rootDir": ".",
+    "strict": true,
+    "target": "es2017"
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "types": ["jest", "node"]
+}

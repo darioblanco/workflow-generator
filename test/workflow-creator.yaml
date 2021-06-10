@@ -1,0 +1,16 @@
+global:
+  values:
+  workflows:
+    - deployment.yml
+    - docs.yml
+    - pr.yml
+    - release-draft.yml
+    - workflow-creator.yml
+
+scoped:
+  - name: my-app
+    values:
+      my_value: 'value1'
+    workflows:
+      - check.yml
+      - deployment-trigger.yml

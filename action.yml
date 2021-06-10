@@ -1,0 +1,25 @@
+name: 'Workflow Generator'
+description: 'Generate Github workflows based on YTT templates'
+author: 'Dario Blanco'
+branding:
+  icon: 'file-plus'
+  color: 'green'
+inputs:
+  config:
+    description: The path to the YAML workflow-generator documentation, relative to ./.github/
+    required: false
+    default: workflow-generator.yml
+  outputFiles:
+    description: The path in the current repository that will hold the generated workflow files.
+    required: false
+    default: .github/workflows
+  templatePath:
+    description: The path in the template repository that hold the YTT files to load with -f.
+    required: false
+    default: ytt
+  token:
+    description: "The token to access Github's API"
+    required: false
+runs:
+  using: 'node12'
+  main: 'dist/run.js'
