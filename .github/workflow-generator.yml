@@ -1,11 +1,7 @@
 global:
   values:
   workflows:
-    - deployment.yml
-    - docs.yml
     - pr.yml
-    - release-draft.yml
-    - workflow-creator.yml
 
 scoped:
   - name: my-app
@@ -15,5 +11,4 @@ scoped:
       qa_url: 'https://qa.darioblanco.com'
       stage_url: 'https://stage.darioblanco.com'
     workflows:
-      - check.yml
       - deployment-trigger.yml
