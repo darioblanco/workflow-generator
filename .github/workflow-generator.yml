@@ -1,5 +1,6 @@
 global:
   values:
+    renovate_cronjob: '0 7,21 * * 1-5'
   workflows:
     - pr.yml
 
