@@ -10,7 +10,7 @@ global:
 scoped:
   - name: my-app
     values:
-      my_value: 'value1'
+      my_value: 'my-app'
     workflows:
       - check.yml
       - deployment-trigger.yml

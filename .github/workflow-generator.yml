@@ -6,7 +6,7 @@ global:
 scoped:
   - name: my-app
     values:
-      package: 'example'
+      package: 'my-app'
       prod_url: 'https://prod.darioblanco.com'
       qa_url: 'https://qa.darioblanco.com'
       stage_url: 'https://stage.darioblanco.com'
