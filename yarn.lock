@@ -490,7 +490,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@commitlint/cli@npm:^12.1.1":
+"@commitlint/cli@npm:^12.1.4":
   version: 12.1.4
   resolution: "@commitlint/cli@npm:12.1.4"
   dependencies:
@@ -509,7 +509,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@commitlint/config-conventional@npm:^12.1.1":
+"@commitlint/config-conventional@npm:^12.1.4":
   version: 12.1.4
   resolution: "@commitlint/config-conventional@npm:12.1.4"
   dependencies:
@@ -8878,8 +8878,8 @@ typescript@^4.2.4:
     "@actions/exec": ^1.1.0
     "@actions/github": ^5.0.0
     "@actions/io": ^1.1.1
-    "@commitlint/cli": ^12.1.1
-    "@commitlint/config-conventional": ^12.1.1
+    "@commitlint/cli": ^12.1.4
+    "@commitlint/config-conventional": ^12.1.4
     "@jbrunton/gha-installer": ^0.5.5
     "@octokit/types": ^6.14.2
     "@types/eslint-plugin-prettier": ^3.1.0
