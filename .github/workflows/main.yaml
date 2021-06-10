@@ -42,6 +42,9 @@ jobs:
     steps:
       - name: Checkout git repository
         uses: actions/checkout@v1.2.0
+      - uses: vmware-tanzu/carvel-setup-action@v1
+        with:
+          only: ytt
       - name: Generate Workflow
         uses: darioblanco/workflow-generator@main
         with:
