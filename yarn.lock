@@ -6931,7 +6931,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.0.0, prettier@npm:^2.3.0":
+"prettier@npm:^2.0.0, prettier@npm:^2.3.1":
   version: 2.3.1
   resolution: "prettier@npm:2.3.1"
   bin:
@@ -8903,7 +8903,7 @@ typescript@^4.2.4:
     jest-config: ^26.6.3
     jest-environment-node: ^26.6.2
     js-yaml: ^4.1.0
-    prettier: ^2.3.0
+    prettier: ^2.3.1
     prettier-eslint: ^12.0.0
     pretty-quick: ^3.1.0
     ts-jest: ^26.5.6
