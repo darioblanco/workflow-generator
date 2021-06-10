@@ -74,6 +74,12 @@ export async function run(): Promise<void> {
     await exec.exec(
       'ytt',
       [`-f ${templatePath}`, `--output-files ${outputFiles}`].concat(globalExtraParams),
+      {
+        listeners: {
+          stdout: (data: Buffer) => core.debug(data.toString()),
+          stderr: (error: Buffer) => core.error(error.toString()),
+        },
+      },
     );
     // Generate YTT templates for scoped workflows
     for (const scope of config.scoped) {
@@ -90,6 +96,12 @@ export async function run(): Promise<void> {
       await exec.exec(
         'ytt',
         [`-f ${templatePath}`, `--output-files ${outputFiles}`].concat(scopeExtraParams),
+        {
+          listeners: {
+            stdout: (data: Buffer) => core.debug(data.toString()),
+            stderr: (error: Buffer) => core.error(error.toString()),
+          },
+        },
       );
     }
   } catch (error) {
