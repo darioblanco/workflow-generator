@@ -54,17 +54,18 @@ export async function run(): Promise<void> {
       throw new Error(`Unable to load config from ${templatePath}`);
     }
     // Show config, current folder and templates
-    core.debug(`Config content:\n ${JSON.stringify(config)}`);
-    await exec.exec('ls -allh', [], {
-      listeners: {
-        stdout: (data: Buffer) => core.debug(`Current folder\n: ${data.toString()}`),
-      },
-    });
-    await exec.exec(`ls -allh ${templatePath}`, [], {
-      listeners: {
-        stdout: (data: Buffer) => core.debug(`Template folder\n: ${data.toString()}`),
-      },
-    });
+    core.debug(`Config content loaded from ${configPath} via octokit:\n ${JSON.stringify(config)}`);
+    if (core.isDebug()) {
+      core.debug('Current working directory:');
+      await exec.exec('pwd');
+      core.debug('Current working directory contents:');
+      await exec.exec('ls -allh');
+      core.debug('Template directory contents:');
+      await exec.exec(`ls -allh ${templatePath}`);
+      core.debug('Output folder contents:');
+      await exec.exec(`ls -allh ${outputFiles}`);
+    }
+
     // Generate YTT templates for global workflows
     const globalExtraParams: string[] = [];
     config.global.workflows.forEach((workflow) => {
