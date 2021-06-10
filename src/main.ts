@@ -105,7 +105,7 @@ export async function run(): Promise<void> {
       const scopeValuesPath = pathJoin(tmpDir, `${scope.name}.yml`);
       core.debug(`Generating ${scope.name} scope values in ${scopeValuesPath}...`);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
-      const serializedValues: string = yaml.dump(config.global.values);
+      const serializedValues: string = yaml.dump(scope.values);
       core.debug(`Serialized values:\n${serializedValues}`);
       fs.writeFileSync(scopeValuesPath, serializedValues);
       for (const workflow of scope.workflows) {
