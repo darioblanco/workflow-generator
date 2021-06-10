@@ -13,8 +13,8 @@ inputs:
     description: The path in the current repository that will hold the generated workflow files.
     required: false
     default: .github/workflows
-  templatePath:
-    description: The path in the template repository that hold the YTT files to load with -f.
+  templatePaths:
+    description: The path (or comma separated list of paths) that hold YTT files to load with -f.
     required: false
     default: ytt
   token:

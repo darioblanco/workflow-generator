@@ -8,7 +8,6 @@ import { GitHub } from '@actions/github/lib/utils';
 import { join as pathJoin, resolve as pathResolve } from 'path';
 
 import { Config } from './types';
-import { tmpdir } from 'os';
 
 function createOctokit() {
   const token = core.getInput('token');
@@ -31,12 +30,12 @@ export async function run(): Promise<void> {
 
     const configPath = pathJoin('.github', core.getInput('config'));
     const outputFiles = pathResolve(cwd, core.getInput('outputFiles'));
-    const templatePath = pathResolve(cwd, core.getInput('templatePath'));
+    const templatePaths = core.getInput('templatePaths').split(',');
     core.debug(
       `Configuration: ${JSON.stringify({
         configPath,
         outputFiles,
-        templatePath,
+        templatePaths,
       })}`,
     );
 
@@ -55,7 +54,7 @@ export async function run(): Promise<void> {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       config = yaml.load(content) as Config;
     } else {
-      throw new Error(`Unable to load config from ${templatePath}`);
+      throw new Error(`Unable to load config from ${configPath}`);
     }
     // Show config, current folder and templates
     core.debug(`Config content loaded from ${configPath} via octokit:\n ${JSON.stringify(config)}`);
@@ -64,8 +63,11 @@ export async function run(): Promise<void> {
       await exec.exec('pwd');
       core.debug('Current working directory contents:');
       await exec.exec('ls -allh');
-      core.debug('Template directory contents:');
-      await exec.exec(`ls -allh ${templatePath}`);
+      for (const templatePath of templatePaths) {
+        const templateResolvedPath = pathResolve(cwd, templatePath);
+        core.debug(`Template directory ${templateResolvedPath} contents:`);
+        await exec.exec(`ls -allh ${templateResolvedPath}`);
+      }
       core.debug('Output folder contents:');
       await exec.exec(`ls -allh ${outputFiles}`);
     }
@@ -76,7 +78,12 @@ export async function run(): Promise<void> {
     core.debug(`Created temporary directory in ${tmpDir}`);
 
     // Generate YTT templates for global workflows
-    const globalExtraParams: string[] = [];
+    const templateCommandParams = () =>
+      templatePaths.reduce<string[]>(
+        (commandParams, templatePath) => commandParams.concat('-f', pathResolve(cwd, templatePath)),
+        [],
+      );
+    const globalExtraParams: string[] = templateCommandParams();
     config.global.workflows.forEach((workflow) => {
       globalExtraParams.push('--file-mark');
       globalExtraParams.push(`${workflow}:exclusive-for-output=true`);
@@ -90,16 +97,12 @@ export async function run(): Promise<void> {
       globalExtraParams.push('--data-values-file');
       globalExtraParams.push(globalValuesPath);
     }
-    await exec.exec(
-      'ytt',
-      ['-f', templatePath, '--output-files', outputFiles].concat(globalExtraParams),
-      {
-        listeners: {
-          stdout: (data: Buffer) => core.debug(data.toString()),
-          stderr: (error: Buffer) => core.error(error.toString()),
-        },
+    await exec.exec('ytt', ['--output-files', outputFiles].concat(globalExtraParams), {
+      listeners: {
+        stdout: (data: Buffer) => core.debug(data.toString()),
+        stderr: (error: Buffer) => core.error(error.toString()),
       },
-    );
+    });
     // Generate YTT templates for scoped workflows
     for (const scope of config.scoped) {
       const scopeValuesPath = pathJoin(tmpDir, `${scope.name}.yml`);
@@ -119,13 +122,11 @@ export async function run(): Promise<void> {
         await exec.exec(
           'ytt',
           [
-            '-f',
-            templatePath,
             '--data-values-file',
             scopeValuesPath,
             '--file-mark',
             `${workflow}:exclusive-for-output=true`,
-          ],
+          ].concat(templateCommandParams()),
           {
             listeners: {
               stdout: (data: Buffer) => fs.writeFileSync(scopeWorkflowPath, data),
