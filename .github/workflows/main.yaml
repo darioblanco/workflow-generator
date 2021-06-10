@@ -49,6 +49,10 @@ jobs:
         uses: darioblanco/workflow-generator@main
         with:
           token: ${{ github.token }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: ci/create-workflows
       - name: Create Release
         uses: darioblanco/release-wizard@main
         with:
