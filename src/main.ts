@@ -71,7 +71,7 @@ export async function run(): Promise<void> {
     }
 
     // Create temporary directory
-    const tmpDir = pathResolve(cwd, 'github', 'tmp');
+    const tmpDir = pathResolve(cwd, '.github', 'tmp');
     await io.mkdirP(tmpDir);
     core.debug(`Created temporary directory in ${tmpDir}`);
 
@@ -79,7 +79,7 @@ export async function run(): Promise<void> {
     const globalExtraParams: string[] = [];
     config.global.workflows.forEach((workflow) => {
       globalExtraParams.push('--file-mark');
-      globalExtraParams.push(`'${workflow}:exclusive-for-output=true'`);
+      globalExtraParams.push(`${workflow}:exclusive-for-output=true`);
     });
     if (config.global.values) {
       const globalValuesPath = pathJoin(tmpDir, 'global.yml');
@@ -123,7 +123,7 @@ export async function run(): Promise<void> {
             '--data-values-file',
             scopeValuesPath,
             '--file-mark',
-            `'${workflow}:exclusive-for-output=true'`,
+            `${workflow}:exclusive-for-output=true`,
           ],
           {
             listeners: {
