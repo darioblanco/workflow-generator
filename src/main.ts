@@ -1,12 +1,14 @@
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 import * as github from '@actions/github';
+import * as io from '@actions/io';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { GitHub } from '@actions/github/lib/utils';
 import { join as pathJoin, resolve as pathResolve } from 'path';
 
 import { Config } from './types';
+import { tmpdir } from 'os';
 
 function createOctokit() {
   const token = core.getInput('token');
@@ -20,14 +22,16 @@ function createOctokit() {
   }
 }
 
+const cwd = process.cwd();
+
 export async function run(): Promise<void> {
   try {
     const { owner, repo } = github.context.repo;
     const { ref } = github.context;
 
     const configPath = pathJoin('.github', core.getInput('config'));
-    const outputFiles = pathResolve(__dirname, core.getInput('outputFiles'));
-    const templatePath = pathResolve(__dirname, core.getInput('templatePath'));
+    const outputFiles = pathResolve(cwd, core.getInput('outputFiles'));
+    const templatePath = pathResolve(cwd, core.getInput('templatePath'));
     core.debug(
       `Configuration: ${JSON.stringify({
         configPath,
@@ -66,6 +70,11 @@ export async function run(): Promise<void> {
       await exec.exec(`ls -allh ${outputFiles}`);
     }
 
+    // Create temporary directory
+    const tmpDir = pathResolve(cwd, 'github', 'tmp');
+    await io.mkdirP(tmpDir);
+    core.debug(`Created temporary directory in ${tmpDir}`);
+
     // Generate YTT templates for global workflows
     const globalExtraParams: string[] = [];
     config.global.workflows.forEach((workflow) => {
@@ -73,7 +82,7 @@ export async function run(): Promise<void> {
       globalExtraParams.push(`'${workflow}:exclusive-for-output=true'`);
     });
     if (config.global.values) {
-      const globalValuesPath = pathResolve(__dirname, 'global.yml');
+      const globalValuesPath = pathJoin(tmpDir, 'global.yml');
       core.debug(`Generating global values in ${globalValuesPath}...`);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
       const serializedValues = yaml.dump(config.global.values);
@@ -93,7 +102,7 @@ export async function run(): Promise<void> {
     );
     // Generate YTT templates for scoped workflows
     for (const scope of config.scoped) {
-      const scopeValuesPath = pathResolve(__dirname, `${scope.name}.yml`);
+      const scopeValuesPath = pathJoin(tmpDir, `${scope.name}.yml`);
       core.debug(`Generating ${scope.name} scope values in ${scopeValuesPath}...`);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
       const serializedValues = yaml.dump(config.global.values);
@@ -125,6 +134,10 @@ export async function run(): Promise<void> {
         );
       }
     }
+
+    // Delete temporary directory
+    await io.rmRF(tmpDir);
+    core.debug(`Deleted temporary directory in ${tmpDir}`);
   } catch (error) {
     core.setFailed((error as Error).message);
   }
