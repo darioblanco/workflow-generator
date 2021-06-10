@@ -53,27 +53,36 @@ export async function run(): Promise<void> {
     } else {
       throw new Error(`Unable to load config from ${templatePath}`);
     }
+    // Show config, current folder and templates
     core.debug(`Config content:\n ${JSON.stringify(config)}`);
-    console.log(`Config content:\n ${JSON.stringify(config)}`);
-    await exec.exec('pwd', [], {
+    await exec.exec('ls -allh', [], {
       listeners: {
-        stdout: (data: Buffer) => core.debug(`Current folder: ${data.toString()}`),
+        stdout: (data: Buffer) => core.debug(`Current folder\n: ${data.toString()}`),
+      },
+    });
+    await exec.exec(`ls -allh ${templatePath}`, [], {
+      listeners: {
+        stdout: (data: Buffer) => core.debug(`Template folder\n: ${data.toString()}`),
       },
     });
     // Generate YTT templates for global workflows
     const globalExtraParams: string[] = [];
     config.global.workflows.forEach((workflow) => {
-      globalExtraParams.push(`--file-mark '${workflow}:exclusive-for-output=true'`);
+      globalExtraParams.push('--file-mark');
+      globalExtraParams.push(`'${workflow}:exclusive-for-output=true'`);
     });
     if (config.global.values) {
+      const globalValuesPath = pathResolve(__dirname, 'global.yml');
+      core.debug(`Generating global values in ${globalValuesPath}...`);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
       const serializedValues = yaml.dump(config.global.values);
-      fs.writeFileSync('global.yml', serializedValues);
-      globalExtraParams.push(`--data-values-file global.yml`);
+      fs.writeFileSync(globalValuesPath, serializedValues);
+      globalExtraParams.push('--data-values-file');
+      globalExtraParams.push(globalValuesPath);
     }
     await exec.exec(
       'ytt',
-      [`-f ${templatePath}`, `--output-files ${outputFiles}`].concat(globalExtraParams),
+      ['-f', templatePath, '--output-files', outputFiles].concat(globalExtraParams),
       {
         listeners: {
           stdout: (data: Buffer) => core.debug(data.toString()),
@@ -83,26 +92,37 @@ export async function run(): Promise<void> {
     );
     // Generate YTT templates for scoped workflows
     for (const scope of config.scoped) {
-      const scopeExtraParams: string[] = [];
-      scope.workflows.forEach((workflow) => {
-        scopeExtraParams.push(`--file-mark '${workflow}:exclusive-for-output=true'`);
-      });
-      if (scope.values) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
-        const serializedValues = yaml.dump(config.global.values);
-        fs.writeFileSync('global.yml', serializedValues);
-        scopeExtraParams.push(`--data-values-file global.yml`);
-      }
-      await exec.exec(
-        'ytt',
-        [`-f ${templatePath}`, `--output-files ${outputFiles}`].concat(scopeExtraParams),
-        {
-          listeners: {
-            stdout: (data: Buffer) => core.debug(data.toString()),
-            stderr: (error: Buffer) => core.error(error.toString()),
+      const scopeValuesPath = pathResolve(__dirname, `${scope.name}.yml`);
+      core.debug(`Generating ${scope.name} scope values in ${scopeValuesPath}...`);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+      const serializedValues = yaml.dump(config.global.values);
+      fs.writeFileSync(scopeValuesPath, serializedValues);
+      for (const workflow of scope.workflows) {
+        const workflowBits = workflow.split('.');
+        const scopeWorkflowName = workflowBits
+          .slice(0, -1)
+          .concat(scope.name, workflowBits.slice(-1))
+          .join('.');
+        const scopeWorkflowPath = pathJoin(outputFiles, scopeWorkflowName);
+        core.debug(`Process workflow ${workflow} into ${scopeWorkflowPath} ...`);
+        await exec.exec(
+          'ytt',
+          [
+            '-f',
+            templatePath,
+            '--data-values-file',
+            scopeValuesPath,
+            '--file-mark',
+            `'${workflow}:exclusive-for-output=true'`,
+          ],
+          {
+            listeners: {
+              stdout: (data: Buffer) => fs.writeFileSync(scopeWorkflowPath, data),
+              stderr: (error: Buffer) => core.error(error.toString()),
+            },
           },
-        },
-      );
+        );
+      }
     }
   } catch (error) {
     core.setFailed((error as Error).message);
