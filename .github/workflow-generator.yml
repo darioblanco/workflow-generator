@@ -2,7 +2,7 @@ global:
   values:
     renovate_cronjob: '0 7,21 * * 1-5'
   workflows:
-    - pr.yml
+    - file: pr.yml
 
 scoped:
   - name: my-app
@@ -12,4 +12,4 @@ scoped:
       qa_url: 'https://qa.darioblanco.com'
       stage_url: 'https://stage.darioblanco.com'
     workflows:
-      - deployment-trigger.yml
+      - file: deployment-trigger.yml

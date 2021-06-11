@@ -1,13 +1,15 @@
+interface Workflow {
+  file: string;
+  overlays?: string[];
+}
 export interface Config {
   global: {
-    overlays?: string[];
     values?: Record<string, string>;
-    workflows: string[];
+    workflows: Workflow[];
   };
   scoped: {
     name: string;
-    overlays?: string[];
     values?: Record<string, string>;
-    workflows: string[];
+    workflows: Workflow[];
   }[];
 }

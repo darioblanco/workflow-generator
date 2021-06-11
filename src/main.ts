@@ -84,16 +84,16 @@ export async function run(): Promise<void> {
         [],
       );
     const globalExtraParams: string[] = templateCommandParams();
-    config.global.workflows.forEach((workflow) => {
+    config.global.workflows.forEach(({ file, overlays }) => {
       globalExtraParams.push('--file-mark');
-      globalExtraParams.push(`${workflow}:exclusive-for-output=true`);
+      globalExtraParams.push(`${file}:exclusive-for-output=true`);
+      if (overlays) {
+        overlays.forEach((overlay) => {
+          globalExtraParams.push('--file-mark');
+          globalExtraParams.push(`${overlay}:exclusive-for-output=true`);
+        });
+      }
     });
-    if (config.global.overlays) {
-      config.global.overlays.forEach((overlay) => {
-        globalExtraParams.push('--file-mark');
-        globalExtraParams.push(`${overlay}:exclusive-for-output=true`);
-      });
-    }
     if (!config.global) {
       throw Error(`The "global" configuration key is required in ${configPath}`);
     }
@@ -120,17 +120,17 @@ export async function run(): Promise<void> {
       const serializedValues: string = yaml.dump(scope.values);
       core.debug(`Serialized values:\n${serializedValues}`);
       fs.writeFileSync(scopeValuesPath, serializedValues);
-      for (const workflow of scope.workflows) {
-        const workflowBits = workflow.split('.');
+      for (const { file: workflowFile, overlays } of scope.workflows) {
+        const workflowBits = workflowFile.split('.');
         const scopeWorkflowName = workflowBits
           .slice(0, -1)
           .concat(scope.name, workflowBits.slice(-1))
           .join('.');
         const scopeWorkflowPath = pathJoin(outputFiles, scopeWorkflowName);
-        core.debug(`Process workflow ${workflow} into ${scopeWorkflowPath} ...`);
-        const fileMarks = ['--file-mark', `${workflow}:exclusive-for-output=true`];
-        if (scope.overlays) {
-          scope.overlays.forEach((overlay) => {
+        core.debug(`Process workflow ${workflowFile} into ${scopeWorkflowPath} ...`);
+        const fileMarks = ['--file-mark', `${workflowFile}:exclusive-for-output=true`];
+        if (overlays) {
+          overlays.forEach((overlay) => {
             fileMarks.push('--file-mark');
             fileMarks.push(`${overlay}:exclusive-for-output=true`);
           });
