@@ -88,6 +88,9 @@ export async function run(): Promise<void> {
       globalExtraParams.push('--file-mark');
       globalExtraParams.push(`${workflow}:exclusive-for-output=true`);
     });
+    if (!config.global) {
+      throw Error(`The "global" configuration key is required in ${configPath}`);
+    }
     if (config.global.values) {
       const globalValuesPath = pathJoin(tmpDir, 'global.yml');
       core.debug(`Generating global values in ${globalValuesPath}...`);
@@ -103,8 +106,8 @@ export async function run(): Promise<void> {
         stderr: (error: Buffer) => core.error(error.toString()),
       },
     });
-    // Generate YTT templates for scoped workflows
-    for (const scope of config.scoped) {
+    // Generate YTT templates for scoped workflows (if defined)
+    for (const scope of config.scoped || []) {
       const scopeValuesPath = pathJoin(tmpDir, `${scope.name}.yml`);
       core.debug(`Generating ${scope.name} scope values in ${scopeValuesPath}...`);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
