@@ -88,6 +88,12 @@ export async function run(): Promise<void> {
       globalExtraParams.push('--file-mark');
       globalExtraParams.push(`${workflow}:exclusive-for-output=true`);
     });
+    if (config.global.overlays) {
+      config.global.overlays.forEach((overlay) => {
+        globalExtraParams.push('--file-mark');
+        globalExtraParams.push(`${overlay}:exclusive-for-output=true`);
+      });
+    }
     if (!config.global) {
       throw Error(`The "global" configuration key is required in ${configPath}`);
     }
@@ -122,14 +128,16 @@ export async function run(): Promise<void> {
           .join('.');
         const scopeWorkflowPath = pathJoin(outputFiles, scopeWorkflowName);
         core.debug(`Process workflow ${workflow} into ${scopeWorkflowPath} ...`);
+        const fileMarks = ['--file-mark', `${workflow}:exclusive-for-output=true`];
+        if (scope.overlays) {
+          scope.overlays.forEach((overlay) => {
+            fileMarks.push('--file-mark');
+            fileMarks.push(`${overlay}:exclusive-for-output=true`);
+          });
+        }
         await exec.exec(
           'ytt',
-          [
-            '--data-values-file',
-            scopeValuesPath,
-            '--file-mark',
-            `${workflow}:exclusive-for-output=true`,
-          ].concat(templateCommandParams()),
+          ['--data-values-file', scopeValuesPath].concat(templateCommandParams(), fileMarks),
           {
             listeners: {
               stdout: (data: Buffer) => fs.writeFileSync(scopeWorkflowPath, data),
