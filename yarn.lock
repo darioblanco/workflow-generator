@@ -999,6 +999,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/openapi-types@npm:^12.4.0":
+  version: 12.4.0
+  resolution: "@octokit/openapi-types@npm:12.4.0"
+  checksum: 223765bf646e1a51a9699a1c1eadd82ad0347769f9cebc352cb0d6861473c547cdb6b12f9e15575dda04c3df7351b540e9445c1d37eff3e9c246059bc5a9a2de
+  languageName: node
+  linkType: hard
+
 "@octokit/openapi-types@npm:^7.2.3":
   version: 7.3.0
   resolution: "@octokit/openapi-types@npm:7.3.0"
@@ -1087,12 +1094,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^6.0.3, @octokit/types@npm:^6.11.0, @octokit/types@npm:^6.13.0, @octokit/types@npm:^6.14.2, @octokit/types@npm:^6.16.1, @octokit/types@npm:^6.16.2":
+"@octokit/types@npm:^6.0.3, @octokit/types@npm:^6.11.0, @octokit/types@npm:^6.13.0, @octokit/types@npm:^6.16.1, @octokit/types@npm:^6.16.2":
   version: 6.16.2
   resolution: "@octokit/types@npm:6.16.2"
   dependencies:
     "@octokit/openapi-types": ^7.2.3
   checksum: b9cf7c0482fbce388a78fb7a7b86b012091087d27e831b428abaa8fbcf9a5c255fa39ab14658b8653e8b639895c00b75849d276fc74c033ee0cdd7046d0ad0e5
+  languageName: node
+  linkType: hard
+
+"@octokit/types@npm:^6.37.0":
+  version: 6.37.0
+  resolution: "@octokit/types@npm:6.37.0"
+  dependencies:
+    "@octokit/openapi-types": ^12.4.0
+  checksum: 93e4a91a096c18f3e1c40f13bb71db96167f12e413431f66fe0f1a8e81e51f2d027e055ffef510923b0ab5eb6495577adfec73045425bdd0eef0fa13c0ca8d84
   languageName: node
   linkType: hard
 
@@ -8881,7 +8897,7 @@ typescript@^4.2.4:
     "@commitlint/cli": ^12.1.4
     "@commitlint/config-conventional": ^12.1.4
     "@jbrunton/gha-installer": ^0.5.5
-    "@octokit/types": ^6.14.2
+    "@octokit/types": ^6.37.0
     "@types/eslint-plugin-prettier": ^3.1.0
     "@types/jest": ^26.0.23
     "@types/js-yaml": ^4.0.1
