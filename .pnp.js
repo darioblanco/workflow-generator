@@ -44,7 +44,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@commitlint/cli", "npm:12.1.4"],
             ["@commitlint/config-conventional", "npm:12.1.4"],
             ["@jbrunton/gha-installer", "npm:0.5.5"],
-            ["@octokit/types", "npm:6.16.2"],
+            ["@octokit/types", "npm:6.41.0"],
             ["@types/eslint-plugin-prettier", "npm:3.1.0"],
             ["@types/jest", "npm:26.0.23"],
             ["@types/js-yaml", "npm:4.0.1"],
@@ -1305,6 +1305,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@octokit/openapi-types", [
+        ["npm:12.11.0", {
+          "packageLocation": "./.yarn/cache/@octokit-openapi-types-npm-12.11.0-cc40f04bc8-46b70fcd45.zip/node_modules/@octokit/openapi-types/",
+          "packageDependencies": [
+            ["@octokit/openapi-types", "npm:12.11.0"]
+          ],
+          "linkType": "HARD",
+        }],
         ["npm:7.3.0", {
           "packageLocation": "./.yarn/cache/@octokit-openapi-types-npm-7.3.0-4d62f9f569-032101dcb6.zip/node_modules/@octokit/openapi-types/",
           "packageDependencies": [
@@ -1450,6 +1457,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@octokit/types", "npm:6.16.2"],
             ["@octokit/openapi-types", "npm:7.3.0"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:6.41.0", {
+          "packageLocation": "./.yarn/cache/@octokit-types-npm-6.41.0-5788f32962-bd3802b953.zip/node_modules/@octokit/types/",
+          "packageDependencies": [
+            ["@octokit/types", "npm:6.41.0"],
+            ["@octokit/openapi-types", "npm:12.11.0"]
           ],
           "linkType": "HARD",
         }]
@@ -10496,7 +10511,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@commitlint/cli", "npm:12.1.4"],
             ["@commitlint/config-conventional", "npm:12.1.4"],
             ["@jbrunton/gha-installer", "npm:0.5.5"],
-            ["@octokit/types", "npm:6.16.2"],
+            ["@octokit/types", "npm:6.41.0"],
             ["@types/eslint-plugin-prettier", "npm:3.1.0"],
             ["@types/jest", "npm:26.0.23"],
             ["@types/js-yaml", "npm:4.0.1"],
