@@ -46,7 +46,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@jbrunton/gha-installer", "npm:0.5.5"],
             ["@octokit/types", "npm:6.16.2"],
             ["@types/eslint-plugin-prettier", "npm:3.1.0"],
-            ["@types/jest", "npm:26.0.23"],
+            ["@types/jest", "npm:26.0.24"],
             ["@types/js-yaml", "npm:4.0.1"],
             ["@types/node", "npm:15.12.2"],
             ["@types/prettier", "npm:2.2.3"],
@@ -1697,10 +1697,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/jest", [
-        ["npm:26.0.23", {
-          "packageLocation": "./.yarn/cache/@types-jest-npm-26.0.23-f0d419e70e-a015676b78.zip/node_modules/@types/jest/",
+        ["npm:26.0.24", {
+          "packageLocation": "./.yarn/cache/@types-jest-npm-26.0.24-47c570294f-e5d3651c1e.zip/node_modules/@types/jest/",
           "packageDependencies": [
-            ["@types/jest", "npm:26.0.23"],
+            ["@types/jest", "npm:26.0.24"],
             ["jest-diff", "npm:26.6.2"],
             ["pretty-format", "npm:26.6.2"]
           ],
@@ -9777,7 +9777,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/$$virtual/ts-jest-virtual-ade7f7b2ad/0/cache/ts-jest-npm-26.5.6-fa1909416a-fd32a8b256.zip/node_modules/ts-jest/",
           "packageDependencies": [
             ["ts-jest", "virtual:11723c20e4657a9c72b9be86ae7ba808c1950870cfcb278df895e9c1c4a9e324867955214aa9f3e8b5546dea6a2ccc37fc62c216356ef2598645de0c83f001e7#npm:26.5.6"],
-            ["@types/jest", "npm:26.0.23"],
+            ["@types/jest", "npm:26.0.24"],
             ["@types/typescript", null],
             ["bs-logger", "npm:0.2.6"],
             ["buffer-from", "npm:1.1.1"],
@@ -10498,7 +10498,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@jbrunton/gha-installer", "npm:0.5.5"],
             ["@octokit/types", "npm:6.16.2"],
             ["@types/eslint-plugin-prettier", "npm:3.1.0"],
-            ["@types/jest", "npm:26.0.23"],
+            ["@types/jest", "npm:26.0.24"],
             ["@types/js-yaml", "npm:4.0.1"],
             ["@types/node", "npm:15.12.2"],
             ["@types/prettier", "npm:2.2.3"],
