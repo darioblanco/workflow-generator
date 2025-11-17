@@ -23,7 +23,7 @@
     "@actions/io": "^1.1.1",
     "@jbrunton/gha-installer": "^0.5.5",
     "@octokit/types": "^6.14.2",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
