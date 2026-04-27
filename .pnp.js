@@ -47,7 +47,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@octokit/types", "npm:6.16.2"],
             ["@types/eslint-plugin-prettier", "npm:3.1.0"],
             ["@types/jest", "npm:26.0.23"],
-            ["@types/js-yaml", "npm:4.0.1"],
+            ["@types/js-yaml", "npm:4.0.9"],
             ["@types/node", "npm:15.12.2"],
             ["@types/prettier", "npm:2.2.3"],
             ["@typescript-eslint/eslint-plugin", "virtual:11723c20e4657a9c72b9be86ae7ba808c1950870cfcb278df895e9c1c4a9e324867955214aa9f3e8b5546dea6a2ccc37fc62c216356ef2598645de0c83f001e7#npm:4.26.1"],
@@ -1708,10 +1708,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/js-yaml", [
-        ["npm:4.0.1", {
-          "packageLocation": "./.yarn/cache/@types-js-yaml-npm-4.0.1-b6801279bc-fd8985289c.zip/node_modules/@types/js-yaml/",
+        ["npm:4.0.9", {
+          "packageLocation": "./.yarn/cache/@types-js-yaml-npm-4.0.9-6a16d01bd2-c8e4ecdc7b.zip/node_modules/@types/js-yaml/",
           "packageDependencies": [
-            ["@types/js-yaml", "npm:4.0.1"]
+            ["@types/js-yaml", "npm:4.0.9"]
           ],
           "linkType": "HARD",
         }]
@@ -10499,7 +10499,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@octokit/types", "npm:6.16.2"],
             ["@types/eslint-plugin-prettier", "npm:3.1.0"],
             ["@types/jest", "npm:26.0.23"],
-            ["@types/js-yaml", "npm:4.0.1"],
+            ["@types/js-yaml", "npm:4.0.9"],
             ["@types/node", "npm:15.12.2"],
             ["@types/prettier", "npm:2.2.3"],
             ["@typescript-eslint/eslint-plugin", "virtual:11723c20e4657a9c72b9be86ae7ba808c1950870cfcb278df895e9c1c4a9e324867955214aa9f3e8b5546dea6a2ccc37fc62c216356ef2598645de0c83f001e7#npm:4.26.1"],
