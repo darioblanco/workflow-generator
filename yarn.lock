@@ -1317,10 +1317,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-yaml@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "@types/js-yaml@npm:4.0.1"
-  checksum: fd8985289c713e3b2a494d6c243139c94bdda856af60346cf0c0da25bd6289e0165d367e623202b8cdfab7cef73a424a183282063beb0c0823d152dbec6d4959
+"@types/js-yaml@npm:^4.0.9":
+  version: 4.0.9
+  resolution: "@types/js-yaml@npm:4.0.9"
+  checksum: c8e4ecdc7becf09b106b95091c1c97c8bb38ad4b83409d09d4dc4e13faf0482efa91bf2799f36a5f55c5ab40d5c3f8c604cc9583bd8869c15c20f13366ee28a4
   languageName: node
   linkType: hard
 
@@ -8884,7 +8884,7 @@ typescript@^4.2.4:
     "@octokit/types": ^6.14.2
     "@types/eslint-plugin-prettier": ^3.1.0
     "@types/jest": ^26.0.23
-    "@types/js-yaml": ^4.0.1
+    "@types/js-yaml": ^4.0.9
     "@types/node": ^15.6.0
     "@types/prettier": 2.2.3
     "@typescript-eslint/eslint-plugin": ^4.24.0
